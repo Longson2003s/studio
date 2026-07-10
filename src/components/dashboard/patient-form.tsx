@@ -49,8 +49,8 @@ export function PatientForm({ onSubmit, isLoading }: PatientFormProps) {
   });
 
   const fields = [
-    { name: 'patientDemographics', label: 'Thông tin nhân khẩu học', placeholder: 'VD: Bệnh nhân nam, 58 tuổi, tiền sử tăng huyết áp...' },
-    { name: 'presentingSymptoms', label: 'Triệu chứng hiện tại', placeholder: 'VD: Đau ngực trái sau xương ức, kéo dài 30 phút...' },
+    { name: 'patientDemographics', label: 'Thông tin nhân khẩu học', placeholder: 'VD: Bệnh nhân nam, 58 tuổi, tiền sử tăng huyết áp...', required: true },
+    { name: 'presentingSymptoms', label: 'Triệu chứng hiện tại', placeholder: 'VD: Đau ngực trái sau xương ức, kéo dài 30 phút...', required: true },
     { name: 'medicalHistory', label: 'Tiền sử bệnh án', placeholder: 'VD: Tăng huyết áp 10 năm, đái tháo đường type 2...' },
     { name: 'physicalExamination', label: 'Khám thực thể', placeholder: 'VD: Mạch 100 l/p, HA 160/90 mmHg, phổi thông khí rõ...' },
     { name: 'labResults', label: 'Kết quả xét nghiệm', placeholder: 'VD: Troponin T tăng, CK-MB tăng...' },
@@ -74,7 +74,10 @@ export function PatientForm({ onSubmit, isLoading }: PatientFormProps) {
                 name={fieldInfo.name}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{fieldInfo.label}</FormLabel>
+                    <FormLabel>
+                      {fieldInfo.label}
+                      {fieldInfo.required && <span className="text-red-500 ml-1">*</span>}
+                    </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder={fieldInfo.placeholder}
