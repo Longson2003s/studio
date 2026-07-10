@@ -1,38 +1,140 @@
-# Medical Diagnosis Assistant - Studio
+# MSG AI Center - Medical Diagnosis & Analytics Platform
 
-Ứng dụng hỗ trợ chẩn đoán y tế dựa trên AI, được xây dựng với Next.js, TypeScript, và Firebase Genkit.
+Nền tảng tổng hợp quản lý y tế và AI - Trung tâm dữ liệu và phân tích cho các hệ thống chẩn đoán AI.
+
+Ứng dụng được xây dựng với Next.js, TypeScript, Tailwind CSS, và Firebase Genkit.
 
 ## 📋 Mục Lục
 
 - [Tính Năng](#-tính-năng)
+- [Cấu Trúc Dự Án](#-cấu-trúc-dự-án)
+- [Các Module Chính](#-các-module-chính)
 - [Yêu Cầu Hệ Thống](#-yêu-cầu-hệ-thống)
 - [Cài Đặt](#-cài-đặt)
 - [Chạy Ứng Dụng](#-chạy-ứng-dụng)
-- [Cấu Trúc Dự Án](#-cấu-trúc-dự-án)
-- [Các Lệnh Có Sẵn](#-các-lệnh-có-sẵn)
 - [Công Nghệ Sử Dụng](#-công-nghệ-sử-dụng)
-- [Hướng Dẫn Sử Dụng](#-hướng-dẫn-sử-dụng)
 
 ## ✨ Tính Năng
 
-- 🏥 **Form Nhập Liệu Bệnh Nhân**: Nhập các thông tin về triệu chứng và tiền sử y tế
-- 🤖 **Chẩn Đoán Thông Minh**: Sử dụng AI để tạo danh sách chẩn đoán khác biệt
-- 💊 **Khuyến Nghị Điều Trị**: Đề xuất các giao thức điều trị phù hợp
-- 🔬 **Khuyến Nghị Xét Nghiệm**: Gợi ý các xét nghiệm chẩn đoán cần thiết
-- 📊 **Dashboard**: Giao diện quản lý trường hợp bệnh nhân
-- 🎨 **UI Hiện Đại**: Giao diện người dùng đẹp mắt với Tailwind CSS
+### 🏥 Quản Lý Bệnh Nhân
+- Quản lý danh sách bệnh nhân toàn bộ hệ thống
+- Tạo và cập nhật hồ sơ bệnh án
+- Lịch sử chẩn đoán và điều trị
+- Theo dõi tình trạng bệnh nhân
+
+### 🤖 Quản Lý AI Flows
+- Quản lý các quy trình AI tự động
+- Chẩn đoán bệnh tim mạch
+- Phân tích hình ảnh CT/MRI
+- Đề xuất phác đồ điều trị
+- Phát hiện các bất thường trong xét nghiệm
+- Theo dõi hiệu suất và độ chính xác
+
+### 📊 Báo Cáo & Thống Kê
+- Báo cáo tuần kỳ và hàng tháng
+- Phân tích hiệu suất AI Flows
+- Thống kê bệnh nhân và chẩn đoán
+- Xuất báo cáo PDF/Excel
+
+### ⚙️ Quản Lý Hệ Thống
+- Quản lý người dùng (Bác sĩ, Admin, Chuyên gia)
+- Cấu hình hệ thống
+- Quản lý bảo mật và phân quyền
+- Cài đặt thông báo
+- Quản lý cơ sở dữ liệu
+
+### 👨‍⚕️ Vai Trò Người Dùng
+- **Bác sĩ**: Nhập liệu bệnh nhân, xem chẩn đoán, quản lý bệnh nhân
+- **Admin**: Quản lý toàn bộ hệ thống, người dùng, AI Flows
+- **Chuyên gia**: Phân tích dữ liệu, tối ưu AI Flows
+- **Ban lãnh đạo**: Xem báo cáo tổng hợp, thống kê
+
+## 🏗️ Cấu Trúc Dự Án
+
+```
+src/
+├── app/
+│   ├── center/                    # MSG AI Center - Module chính
+│   │   ├── page.tsx              # Dashboard tổng quan
+│   │   ├── layout.tsx            # Layout chính
+│   │   ├── patients/             # Quản lý bệnh nhân
+│   │   ├── ai-flows/             # Quản lý AI Flows
+│   │   ├── reports/              # Báo cáo
+│   │   ├── analytics/            # Thống kê & Phân tích
+│   │   └── settings/             # Cài đặt
+│   │
+│   ├── dashboard/                 # Dashboard bác sĩ (cũ)
+│   ├── layout.tsx                # Root layout
+│   └── page.tsx                  # Home page
+│
+├── components/
+│   ├── center/                   # Components cho MSG AI Center
+│   │   └── center-sidebar.tsx    # Sidebar navigation
+│   ├── dashboard/                # Components dashboard
+│   ├── ui/                       # UI components (Radix)
+│   └── common/                   # Shared components
+│
+├── ai/                           # AI Flows & Genkit integration
+│   ├── flows/
+│   ├── genkit.ts
+│   └── dev.ts
+│
+├── hooks/                        # Custom React hooks
+├── lib/                          # Utilities & helpers
+└── app/actions.ts               # Server actions
+
+```
+
+## 📦 Các Module Chính
+
+### 1. **Dashboard Tổng Quan** (`/center`)
+- Thống kê nhanh (KPI)
+- Hoạt động gần đây
+- Truy cập nhanh các module
+
+### 2. **Quản Lý Bệnh Nhân** (`/center/patients`)
+- Danh sách bệnh nhân
+- Tìm kiếm và lọc
+- Xem chi tiết
+- Sửa hồ sơ
+- Lịch sử chẩn đoán
+
+### 3. **Quản Lý AI Flows** (`/center/ai-flows`)
+- Danh sách AI Flows
+- Chạy Flow
+- Theo dõi hiệu suất
+- Xem chi tiết
+
+### 4. **Báo Cáo** (`/center/reports`)
+- Danh sách báo cáo
+- Tạo báo cáo mới
+- Tải xuống
+- Tình trạng xử lý
+
+### 5. **Thống Kê** (`/center/analytics`)
+- KPI và Metrics
+- Chẩn đoán phổ biến
+- Hiệu suất AI Flows
+- Thống kê hệ thống
+
+### 6. **Cài Đặt** (`/center/settings`)
+- Cài đặt chung
+- Bảo mật
+- Thông báo
+- Cơ sở dữ liệu
 
 ## 🖥️ Yêu Cầu Hệ Thống
 
 - **Node.js**: Phiên bản 18.0 trở lên
 - **npm** hoặc **yarn**: Trình quản lý gói
+- **MongoDB**: Cơ sở dữ liệu (tùy chọn)
 - **Git**: Để clone repository
 
 ## 📦 Cài Đặt
 
 ### 1. Clone Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/Longson2003s/studio.git
 cd STUDIO
 ```
 
