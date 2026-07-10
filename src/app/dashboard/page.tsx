@@ -75,8 +75,6 @@ export default function DashboardPage() {
           <RecentActivity />
         </div>
       </div>
-        </div>
-      </div>
     </main>
   );
 }
