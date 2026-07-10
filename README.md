@@ -61,7 +61,12 @@ src/
 │   │   ├── ai-flows/             # Quản lý AI Flows
 │   │   ├── reports/              # Báo cáo
 │   │   ├── analytics/            # Thống kê & Phân tích
+│   │   ├── ai-agent/             # AI Medical Assistant (Chatbot)
+│   │   ├── integrations/         # Tích hợp Excel, Power BI, Power Automate
 │   │   └── settings/             # Cài đặt
+│   │
+│   ├── api/                       # Next.js API Routes
+│   │   └── ai/chat/route.ts      # AI Chat endpoint
 │   │
 │   ├── dashboard/                 # Dashboard bác sĩ (cũ)
 │   ├── layout.tsx                # Root layout
@@ -81,8 +86,14 @@ src/
 │
 ├── hooks/                        # Custom React hooks
 ├── lib/                          # Utilities & helpers
+│   └── integrations/             # Integration modules
+│       ├── excel.ts              # Excel export/import
+│       ├── powerbi.ts            # Power BI integration
+│       ├── powerautomate.ts      # Power Automate workflows
+│       ├── ai-agent.ts           # AI Agent chatbot
+│       └── index.ts              # Module exports
+│
 └── app/actions.ts               # Server actions
-
 ```
 
 ## 📦 Các Module Chính
@@ -117,11 +128,26 @@ src/
 - Hiệu suất AI Flows
 - Thống kê hệ thống
 
-### 6. **Cài Đặt** (`/center/settings`)
+### 6. **AI Medical Assistant** (`/center/ai-agent`)
+- Chatbot hỗ trợ bác sĩ
+- Phân tích dữ liệu bệnh nhân
+- Trả lời câu hỏi y tế
+- Gợi ý xét nghiệm thông minh
+- Lịch sử trò chuyện
+
+### 7. **Tích Hợp Công Cụ** (`/center/integrations`)
+- **Excel**: Nhập/xuất dữ liệu bệnh nhân
+- **Power BI**: Đồng bộ dữ liệu và tạo báo cáo
+- **Power Automate**: Tự động hoá quy trình làm việc
+- **AI Agent**: Quản lý chatbot AI
+- Trạng thái tích hợp theo thời gian thực
+
+### 8. **Cài Đặt** (`/center/settings`)
 - Cài đặt chung
 - Bảo mật
 - Thông báo
 - Cơ sở dữ liệu
+- Quản lý tích hợp
 
 ## 🖥️ Yêu Cầu Hệ Thống
 
@@ -150,18 +176,48 @@ yarn install
 
 ### 3. Cấu Hình Biến Môi Trường
 Tạo file `.env.local` trong thư mục gốc:
+
 ```env
-# Firebase configuration
+# AI & Genkit Configuration
+GOOGLE_GENAI_API_KEY=your_google_genai_api_key
+
+# Power BI Integration (Optional)
+POWER_BI_TENANT_ID=your_tenant_id
+POWER_BI_CLIENT_ID=your_client_id
+POWER_BI_CLIENT_SECRET=your_client_secret
+POWER_BI_WORKSPACE_ID=your_workspace_id
+POWER_BI_DATASET_ID=your_dataset_id
+
+# Power Automate Integration (Optional)
+POWER_AUTOMATE_WEBHOOK_URL=your_webhook_url
+
+# Firebase configuration (If using Firebase)
 NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-
-# Firebase Genkit
-GENKIT_API_KEY=your_genkit_api_key
 ```
+
+#### Hướng Dẫn Lấy API Key:
+
+**Google Genkit API Key:**
+1. Truy cập [Google AI Studio](https://aistudio.google.com)
+2. Tạo API Key mới
+3. Sao chép vào `GOOGLE_GENAI_API_KEY`
+
+**Power BI Credentials:**
+1. Truy cập [Azure Portal](https://portal.azure.com)
+2. Đăng ký ứng dụng Azure AD
+3. Lấy Tenant ID, Client ID, Client Secret
+4. Tạo Workspace và Dataset trong Power BI
+5. Điền vào các biến tương ứng
+
+**Power Automate Webhook:**
+1. Tạo Cloud Flow trong Power Automate
+2. Sử dụng HTTP trigger
+3. Sao chép Webhook URL
 
 ## 🚀 Chạy Ứng Dụng
 
@@ -320,6 +376,83 @@ import { zodResolver } from '@hookform/resolvers/zod';
 const form = useForm({
   resolver: zodResolver(validationSchema)
 });
+```
+
+### Sử Dụng AI Medical Assistant
+```typescript
+import AIAgent from '@/lib/integrations/ai-agent';
+
+const agent = new AIAgent();
+
+// Chat với AI
+const response = await agent.chat('Bệnh nhân có triệu chứng gì?');
+
+// Phân tích bệnh nhân
+const analysis = await agent.analyzePatient({
+  name: 'Nguyễn Văn A',
+  age: 58,
+  symptoms: ['Đau ngực', 'Khó thở']
+});
+
+// Trả lời câu hỏi y tế
+const answer = await agent.answerMedicalQuestion('Bệnh tim có triệu chứng nào?');
+```
+
+### Xuất Dữ Liệu Excel
+```typescript
+import { exportPatientsToExcel, exportDiagnosisReport } from '@/lib/integrations/excel';
+
+// Xuất danh sách bệnh nhân
+exportPatientsToExcel(patients, 'patients.xlsx');
+
+// Xuất báo cáo chẩn đoán
+exportDiagnosisReport(diagnosis, 'Nguyễn Văn A', 'diagnosis.xlsx');
+```
+
+### Tích Hợp Power BI
+```typescript
+import PowerBIIntegration from '@/lib/integrations/powerbi';
+
+const pbi = new PowerBIIntegration();
+
+// Đẩy dữ liệu lên Power BI
+await pbi.pushDataToDataset('Patients', patientData);
+
+// Làm mới dataset
+await pbi.refreshDataset();
+
+// Lấy URL embed cho báo cáo
+const embedUrl = await pbi.generateEmbedUrl(reportId);
+```
+
+### Tự Động Hoá Workflow với Power Automate
+```typescript
+import PowerAutomateIntegration from '@/lib/integrations/powerautomate';
+
+const automate = new PowerAutomateIntegration();
+
+// Gửi cảnh báo chẩn đoán
+await automate.sendDiagnosisAlert(
+  'doctor@hospital.com',
+  'Nguyễn Văn A',
+  'Bệnh tim mạch',
+  'Cao'
+);
+
+// Gửi thông báo Teams
+await automate.sendTeamsNotification(
+  'channel-id',
+  'Chẩn đoán Mới',
+  'Bệnh nhân Nguyễn Văn A có chẩn đoán mới'
+);
+
+// Lên lịch cuộc hẹn
+await automate.scheduleAppointment(
+  'patient@email.com',
+  'Nguyễn Văn A',
+  'BS. Trần Văn B',
+  new Date('2026-07-15 09:00')
+);
 ```
 
 ## 📝 Các File Chính

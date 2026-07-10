@@ -22,7 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { Building, Users, Brain, FileText, TrendingUp, Settings, LogOut, BarChart3 } from 'lucide-react';
+import { Building, Users, Brain, FileText, TrendingUp, Settings, LogOut, BarChart3, Zap, MessageSquare } from 'lucide-react';
 import { Logo } from '../common/logo';
 
 const menuItems = [
@@ -31,6 +31,8 @@ const menuItems = [
   { href: '/center/ai-flows', label: 'AI Flows', icon: Brain },
   { href: '/center/reports', label: 'Báo cáo', icon: FileText },
   { href: '/center/analytics', label: 'Thống kê', icon: TrendingUp },
+  { href: '/center/ai-agent', label: 'AI Agent', icon: MessageSquare },
+  { href: '/center/integrations', label: 'Tích hợp', icon: Zap },
   { href: '/center/settings', label: 'Cài đặt', icon: Settings },
 ];
 
